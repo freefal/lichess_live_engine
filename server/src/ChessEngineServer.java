@@ -141,6 +141,7 @@ public class ChessEngineServer {
 						int mateStart = mateLocation + 6;
 						int mateEnd = line.indexOf(" ", mateStart);
 						eval = "#" + line.substring(mateStart, mateEnd);
+						System.out.println(line);
 					}
 					else {
 						int cpLocation = line.indexOf(" cp ");
