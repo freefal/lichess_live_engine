@@ -15,12 +15,12 @@ public class ChessEngineClient {
 		try {
 			String url = "http://localhost:8080/stockfish/evaluate";
 
-			HttpClient client = new DefaultHttpClient();
+			HttpClient client = HttpClientBuilder.create().build();
 			HttpPost post = new HttpPost(url);
 
 			List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
 			urlParameters.add(new BasicNameValuePair("clientid", CLIENT_ID));
-			urlParameters.add(new BasicNameValuePair("fen", "1r2k2r/ppp1qp2/5b2/3Bp3/3n2Q1/2N5/PPP3PP/3R1RK1 w k - 4 16"));
+			urlParameters.add(new BasicNameValuePair("fen", "2r4k/p2p1ppp/8/8/2B5/8/P1q1RPPP/4R1K1 w - - 0 21"));
 
 			post.setEntity(new UrlEncodedFormEntity(urlParameters));
 
@@ -44,7 +44,7 @@ public class ChessEngineClient {
 
 			url = "http://localhost:8080/stockfish/evaluate?clientid=" + CLIENT_ID;
 
-			client = new DefaultHttpClient();
+			client = HttpClientBuilder.create().build();
 			HttpGet get = new HttpGet(url);
 			response = client.execute(get);
 			rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));

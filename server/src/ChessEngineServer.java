@@ -91,7 +91,7 @@ public class ChessEngineServer {
 		public int clientID;
 		public String fen;
 		public String bestMove;
-		public int eval;
+		public String eval;
 		public int depth;
 		public long startTime;
 		public boolean running = true;
@@ -102,7 +102,7 @@ public class ChessEngineServer {
 			this.clientID = clientID;
 			this.fen = fen;
 			bestMove = null;
-			eval = 0;
+			eval = "0";
 			depth = 0;
 			whiteMove = fen.split(" ")[1].equals("w") ? 1 : -1;
 		}
@@ -134,12 +134,22 @@ public class ChessEngineServer {
 					int depthStart = depthLocation + 7;
 					int depthEnd = line.indexOf(" ", depthStart);
 					int depth = Integer.parseInt(line.substring(depthStart, depthEnd));
-					
-					int cpLocation = line.indexOf(" cp ");
-					int cpStart = cpLocation + 4;
-					int cpEnd = line.indexOf(" ", cpStart);
-					int eval = Integer.parseInt(line.substring(cpStart, cpEnd));
-
+				
+					String eval = "";
+					int mateLocation = line.indexOf(" mate ");
+					if (mateLocation >= 0) {
+						int mateStart = mateLocation + 6;
+						int mateEnd = line.indexOf(" ", mateStart);
+						eval = "#" + line.substring(mateStart, mateEnd);
+					}
+					else {
+						int cpLocation = line.indexOf(" cp ");
+						int cpStart = cpLocation + 4;
+						int cpEnd = line.indexOf(" ", cpStart);
+						int evalInt = Integer.parseInt(line.substring(cpStart, cpEnd));
+						evalInt *= whiteMove;
+						eval = (((double)evalInt)/100.0) + "";
+					}
 					int pvLocation = line.indexOf(" pv ");
 					int pvStart = pvLocation + 4;
 					int pvEnd = line.indexOf(" ", pvStart);
@@ -148,7 +158,7 @@ public class ChessEngineServer {
 					String bestMove = line.substring(pvStart, pvEnd);
 
 					this.depth = depth;
-					this.eval = eval * whiteMove;
+					this.eval = eval;
 					this.bestMove = bestMove;
 				}
 				writer.println("quit");
