@@ -1,0 +1,54 @@
+<project name="ChessEngineServer" basedir="." default="main">
+
+	<path id="classpath">
+ 		<fileset dir="lib" includes="**/*.jar"/>
+	</path>
+    
+	<target name="clean">
+		<delete dir="build"/>
+	</target>
+
+	<target name="compile">
+		<mkdir dir="build/classes"/>
+		<javac includeantruntime="false" srcdir="src" destdir="build/classes">
+			<classpath>
+				<path refid="classpath"/>
+			</classpath>
+		</javac>
+	</target>
+
+	<mkdir dir="build/jar" />	
+	<manifestclasspath property="lib.list" jarfile="build/jar/ChessEngineServer.jar">
+		    <classpath refid="classpath"/>
+	</manifestclasspath>
+	
+	<target name="jar" depends="compile">
+		<mkdir dir="build/jar"/>
+		<jar destfile="build/jar/ChessEngineServer.jar" basedir="build/classes">
+			<fileset dir="build/classes" includes="**/*.class" />
+			<fileset dir="lib" includes="**/*.jar" />
+			<manifest>
+				<attribute name="Main-Class" value="ChessEngineServer"/>
+				<attribute name="Class-Path" value="${lib.list}"/>
+			</manifest>
+
+		</jar>
+	</target>
+
+	<target name="run" depends="jar">
+		<java fork="true" jar="build/jar/ChessEngineServer.jar"> 
+		</java>
+	</target>
+
+	<target name="runclient" depends="jar">
+		<java fork="true" classname="ChessEngineClient">
+			<classpath>
+				<pathelement location="build/jar/ChessEngineServer.jar"/>
+			</classpath> 
+		</java>
+	</target>
+
+	<target name="clean-build" depends="clean,jar"/>
+	<target name="main" depends="clean,jar"/>
+
+</project>
