@@ -129,6 +129,7 @@ public class ChessEngineServer {
 				writer.flush();
 
 				while ((line = reader.readLine())!= null) {
+					System.out.println(line);
 					if (die)
 						break;
 					if (line.indexOf("bestmove") >= 0)
@@ -147,7 +148,6 @@ public class ChessEngineServer {
 						int mateStart = mateLocation + 6;
 						int mateEnd = line.indexOf(" ", mateStart);
 						int evalInt = Integer.parseInt(line.substring(mateStart, mateEnd));
-						evalInt *= whiteMove;
 						eval = "#" + evalInt;
 					}
 					else {
