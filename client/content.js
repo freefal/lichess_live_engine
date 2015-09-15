@@ -6,6 +6,7 @@ var clientid = Math.floor(Math.random() * 1000000);
 var evalChecker = null;
 var fenChecker = null;
 var curfen = null;
+var Chess = require('./chess').Chess;
 
 function startEval() {
   var fenInput = document.getElementsByClassName("fen")[0];
@@ -45,7 +46,17 @@ function checkEval() {
         console.log(data);
         if (data.status !== "found" || data.bestMove === undefined)
           return;
-        var evalOutput = "(" + data.eval/100 + ") [" + data.depth + "] " + data.bestMove;
+	
+	var bestMoveLong = data.bestMove;	
+	var fromSq = bestMoveLong.substring(0,2);
+	var toSq = bestMoveLong.subistring(2,4);
+	var chess = new Chess(curFen);
+	var success = chess.move({ from: fromSq, to: toSq });
+	var bestMoveShort = chess.history()[0];
+        
+	var evalOutput = "";
+	if (success !== null)
+		evalOutput = "(" + data.eval/100 + ") [" + data.depth + "] " + data.bestMove;
         watchersDiv.innerHTML = evalOutput;
         messagesDiv = evalOutput;
 

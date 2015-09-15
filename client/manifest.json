@@ -4,7 +4,7 @@
   "description": "Adds live analysis board for post-mortem analysis.",
   "content_scripts": [{
     "matches": ["http://*.lichess.org/*"],
-    "js": ["jquery-2.1.4.min.js", "content.js"]
+    "js": ["chess.js", "jquery-2.1.4.min.js", "content.js"]
   }],
   "background": {
     "scripts": ["background.js"],
