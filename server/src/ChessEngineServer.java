@@ -23,14 +23,15 @@ public class ChessEngineServer {
 
 		Server server = new Server(8080);
 		ServletHandler handler = new ServletHandler();
-		handler.addServletWithMapping(ChessEngineServlet.class, "/stockfish/evaluate"); //Set the servlet to run.
+		handler.addServletWithMapping(StartEvalServlet.class, "/stockfish/evaluate"); //Set the servlet to run.
+		handler.addServletWithMapping(GetEvalServlet.class, "/stockfish/geteval"); //Set the servlet to run.
 		server.setHandler(handler);    
 		server.start();
 		server.join();
 	}
 
 	@SuppressWarnings("serial")
-		public static class ChessEngineServlet extends HttpServlet {
+		public static class StartEvalServlet extends HttpServlet {
 			@Override
 				protected void doPost (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 					int clientID = Integer.parseInt(request.getParameter("clientid"));
@@ -57,11 +58,14 @@ public class ChessEngineServer {
 					writer.flush();
 					writer.close();
 				}
+		}
 
+	@SuppressWarnings("serial")
+		public static class GetEvalServlet extends HttpServlet {
 			@Override
 				protected void doGet (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 					int clientID = Integer.parseInt(request.getParameter("clientid"));
-					System.out.println("Checking eval for: " + clientID);
+					System.out.println("Checking eval for client(" + clientID + ")");
 					ChessEngineThread cet = threadMap.get(clientID);
 					JSONObject output = new JSONObject();
 
@@ -86,7 +90,9 @@ public class ChessEngineServer {
 					writer.close();
 				}
 		}
-
+	
+	
+	
 	public static class ChessEngineThread extends Thread {
 		public int clientID;
 		public String fen;
@@ -182,7 +188,7 @@ public class ChessEngineServer {
 					long curTime = System.currentTimeMillis();
 					if (curTime > endTime) {
 						threadMap.remove(cet.clientID);
-						System.out.println("Killed client " + cet.clientID);
+						System.out.println("Killed client (" + cet.clientID + ")");
 					}
 				}
 				try {

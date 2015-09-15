@@ -42,7 +42,7 @@ public class ChessEngineClient {
 
 			Thread.sleep(5000);
 
-			url = "http://localhost:8080/stockfish/evaluate?clientid=" + CLIENT_ID;
+			url = "http://localhost:8080/stockfish/geteval?clientid=" + CLIENT_ID;
 
 			client = HttpClientBuilder.create().build();
 			HttpGet get = new HttpGet(url);
