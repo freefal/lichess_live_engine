@@ -129,7 +129,6 @@ public class ChessEngineServer {
 				writer.flush();
 
 				while ((line = reader.readLine())!= null) {
-					System.out.println(line);
 					if (die)
 						break;
 					if (line.indexOf("bestmove") >= 0)
